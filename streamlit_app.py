@@ -72,15 +72,28 @@ if not datos.empty:
     fin = inicio + registros_por_pagina
     datos_pagina = datos.iloc[inicio:fin].reset_index(drop=True)
 
-    # Mostrar los datos con botón de eliminar al lado
+    # Fuente compacta y lista más cerrada (fuente Roboto Condensed, o Arial si no está disponible)
     st.write("### Lista de usuarios")
     for i, row in datos_pagina.iterrows():
-        col1, col2, col3 = st.columns([4, 5, 1])
-        col1.write(row["Nombre"])
-        col2.write(row["Correo"])
-        eliminar_btn = col3.button("🗑️", key=f"eliminar_{inicio + i}", help="Eliminar este usuario")
+        st.markdown(
+            f"""
+            <div style='
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                font-family:"Roboto Condensed", Arial, sans-serif;
+                font-size:15px;
+                padding:2px 0 2px 0;
+                border-bottom:1px solid #eee;
+            '>
+                <span style='width:35%'>{row["Nombre"]}</span>
+                <span style='width:50%'>{row["Correo"]}</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        eliminar_btn = st.button("🗑️", key=f"eliminar_{inicio + i}", help="Eliminar este usuario")
         if eliminar_btn:
-            # Eliminar el usuario correspondiente
             datos = datos.drop(datos.index[inicio + i]).reset_index(drop=True)
             guardar_datos(datos)
             st.success("¡Contacto eliminado correctamente!")
