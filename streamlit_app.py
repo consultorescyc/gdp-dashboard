@@ -87,7 +87,7 @@ if not datos.empty:
                 border-bottom:1px solid #eee;
             '>
                 <span style='width:35%'>{row["Nombre"]}</span>
-                <span style='width:50%'>{row["Correo"]}</span>
+                <span style='width:10%'>{row["Correo"]}</span>
             </div>
             """,
             unsafe_allow_html=True,
