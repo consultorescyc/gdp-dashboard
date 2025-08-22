@@ -85,7 +85,7 @@ if not datos.empty:
     }
     .tabla-usuarios th, .tabla-usuarios td {
         border-bottom: 1px solid #eee;
-        padding: 3px 3px;
+        padding: 1px 1px;
         text-align: left;
         vertical-align: middle;
     }
