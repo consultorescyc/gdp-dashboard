@@ -72,35 +72,60 @@ if not datos.empty:
     fin = inicio + registros_por_pagina
     datos_pagina = datos.iloc[inicio:fin].reset_index(drop=True)
 
-    # Fuente compacta y lista más cerrada (fuente Roboto Condensed, o Arial si no está disponible)
     st.write("### Lista de usuarios")
-    for i, row in datos_pagina.iterrows():
-        st.markdown(
-            f"""
-            <div style='
-                display:flex;
-                align-items:center;
-                justify-content:space-between;
-                font-family:"Roboto Condensed", Arial, sans-serif;
-                font-size:15px;
-                padding:2px 0 2px 0;
-                border-bottom:1px solid #eee;
-            '>
-                <span style='width:5%'>{row["Nombre"]}</span>
-                <span style='width:50%'>{row["Correo"]}</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        
-        )
-        eliminar_btn = st.button("🗑️", key=f"eliminar_{inicio + i}", help="Eliminar este usuario")
-        if eliminar_btn:
-            datos = datos.drop(datos.index[inicio + i]).reset_index(drop=True)
-            guardar_datos(datos)
-            st.success("¡Contacto eliminado correctamente!")
-            st.experimental_rerun()
 
-        
+    # Tabla en HTML para mayor control del layout
+    tabla_html = """
+    <style>
+    .tabla-usuarios {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "Roboto Condensed", Arial, sans-serif;
+        font-size: 15px;
+    }
+    .tabla-usuarios th, .tabla-usuarios td {
+        border-bottom: 1px solid #eee;
+        padding: 4px 8px;
+        text-align: left;
+        vertical-align: middle;
+    }
+    .tabla-usuarios th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+    }
+    .tabla-usuarios tr:last-child td {
+        border-bottom: none;
+    }
+    </style>
+    <table class="tabla-usuarios">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Nombre</th>
+          <th style="width: 55%;">Correo</th>
+          <th style="width: 20%;">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+    """
+    st.markdown(tabla_html, unsafe_allow_html=True)
+
+    # Usar columnas para los botones de eliminar junto a la tabla
+    for i, row in datos_pagina.iterrows():
+        cols = st.columns([0.25, 0.55, 0.2])
+        with cols[0]:
+            st.markdown(f"<div style='padding:4px 0'>{row['Nombre']}</div>", unsafe_allow_html=True)
+        with cols[1]:
+            st.markdown(f"<div style='padding:4px 0'>{row['Correo']}</div>", unsafe_allow_html=True)
+        with cols[2]:
+            eliminar_btn = st.button("🗑️ Eliminar", key=f"eliminar_{inicio + i}", help="Eliminar este usuario")
+            if eliminar_btn:
+                datos = datos.drop(datos.index[inicio + i]).reset_index(drop=True)
+                guardar_datos(datos)
+                st.success("¡Contacto eliminado correctamente!")
+                st.experimental_rerun()
+
+    # Cierre de tabla (visual, no funcional en Streamlit)
+    st.markdown("</tbody></table>", unsafe_allow_html=True)
 
     # Navegación minimalista debajo de la lista
     st.markdown("---")
