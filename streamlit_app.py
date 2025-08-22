@@ -92,7 +92,7 @@ if not datos.empty:
             """,
             unsafe_allow_html=True,
         
-        
+        )
         eliminar_btn = st.button("🗑️", key=f"eliminar_{inicio + i}", help="Eliminar este usuario")
         if eliminar_btn:
             datos = datos.drop(datos.index[inicio + i]).reset_index(drop=True)
@@ -100,7 +100,7 @@ if not datos.empty:
             st.success("¡Contacto eliminado correctamente!")
             st.experimental_rerun()
 
-        )
+        
 
     # Navegación minimalista debajo de la lista
     st.markdown("---")
